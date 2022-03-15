@@ -22,8 +22,9 @@ class ArticlesController < ApplicationController
     @article = Article.new(article_params)
 
     if @article.save
-      redirect_to @article
+      redirect_to @article, notice: 'Article was successfully created.'
     else
+      flash[:alert] = 'Something went wrong'
       render :new
     end
   end
@@ -32,26 +33,25 @@ class ArticlesController < ApplicationController
 
   def update
     if @article.update(article_params)
-      redirect_to @article
+      redirect_to @article, notice: 'Article was successfully updated.'
     else
+      flash[:alert] = 'Something went wrong'
       render :new
     end
   end
 
   def destroy
     if @article.destroy
-      flash[:success] = 'Article was successfully deleted.'
-      redirect_to articles_url
+      redirect_to articles_url, notice: 'Article was successfully deleted.'
     else
-      flash[:error] = 'Something went wrong'
-      redirect_to articles_url
+      redirect_to articles_url, alert: 'Something went wrong'
     end
   end
 
   private
 
   def article_params
-    params.require(:article).permit(:title, :body)
+    params.require(:article).permit(:title, :body, :category_id)
   end
 
   def set_article
